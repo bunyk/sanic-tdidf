@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset=utf-8>
+        <title>Performance test</title>
+    </head>
+    <body>
+    <pre id="tty0"></pre>
+    <button onclick="testREST(30)">REST</button>
+    <button onclick="testWS(30)">WebSockets</button>
+    <script>
+    var tty = document.getElementById("tty0");
+
+    function println(s) {
+        tty.innerHTML += s + '\n';
+    }
+    function print(s) {
+        tty.innerHTML += s;
+    }
+
+
+    function testREST(count) {
+        println("\ntesting REST queries...")
+        var start = performance.now();
+
+        var received = 0;
+        println("Sending")
+        for(var i = 0; i < count; i++) {
+            print(i + ', ')
+            fetch('/ping').then(function(r) {
+                received ++;
+                print(received + ', ')
+                if (received >= count) {
+                    println("\nThis took " + (performance.now() - start) + " milliseconds.")
+                }
+            })
+        }
+        println("\nReceiving")
+    }
+    function testWS(count) {
+        println("\ntesting WebSocket queries...")
+        var start = performance.now();
+        var socket = new WebSocket('ws://' + window.location.host + '/ws/');
+        var received = 0;
+        socket.onmessage = function(e) {
+            var data = e.data;
+            received++
+            print(received + ', ')
+            if (received >= count) {
+                println("\nThis took " + (performance.now() - start) + " milliseconds.")
+            }
+        };
+
+        socket.onclose = function(e) {
+            println('Socket closed unexpectedly');
+        };
+        socket.onopen = function(e) {
+            println("Sending")
+            for(var i = 0; i < count; i++) {
+                print(i + ', ')
+                socket.send('ping')
+            }
+            println("\nReceiving")
+        };
+    }
+    </script>
+    </body>
+</html>
