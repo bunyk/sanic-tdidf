@@ -4,7 +4,7 @@ services:
   web:
     container_name: web
     build: .
-    command: python -m sanic tfidf.app --host=0.0.0.0 --port=8000 --workers=1
+    command: python -m sanic tfidf.app --host=0.0.0.0 --port=8000 --workers=1 --debug
     environment:
         TFIDF_PORT: 8000
         TFIDF_DB_HOST: db
