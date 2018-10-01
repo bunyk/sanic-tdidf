@@ -1,5 +1,9 @@
+'''
+    Defines create_app() which returns sanic application to run
+'''
 from sanic import Sanic
 from sanic.response import json
+from sanic.views import HTTPMethodView
 
 from .database_setup import attach_db
 from .page import PageView
@@ -16,8 +20,3 @@ def create_app():
     app.static('/', './static')
     app.static('/', './static/index.html')
     return app
-
-
-app = create_app()
-print("ROUTES:", app.router.routes_names)
-

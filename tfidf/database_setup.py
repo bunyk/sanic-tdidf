@@ -1,10 +1,17 @@
+'''
+    Defines functions to create and obtain connection pool
+'''
 from asyncpg import create_pool
 
-_pool = None
+_POOL = None
 
 async def register_db(app, loop):
-    global _pool
-    _pool = await create_pool(
+    '''
+        Creates connection pool with configuration provided in app
+        loop - event_loop
+    '''
+    global _POOL # pylint: disable=global-statement
+    _POOL = await create_pool(
         host=app.config.DB_HOST,
         user=app.config.DB_USER,
         password=app.config.DB_PASSWORD,
@@ -21,10 +28,12 @@ async def register_db(app, loop):
             text text
         );""")
 
-
-def acquire_pool():
-    return _pool.acquire()
-
 def attach_db(app):
+    ''' Creates connection pool before app starts '''
     before_server_start = app.listener('before_server_start')
     before_server_start(register_db)
+
+
+def acquire_pool():
+    ''' Returns database connection from the pool '''
+    return _POOL.acquire()

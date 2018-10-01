@@ -1,2 +1,2 @@
-sanic>=0.8.3
-asyncpg>=0.17.0
+sanic==0.8.3
+asyncpg==0.17.0
