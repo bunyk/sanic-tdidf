@@ -21,7 +21,8 @@ async def register_db(app, loop):
             text text
         );""")
 
-def acqire_pool():
+
+def acquire_pool():
     return _pool.acquire()
 
 def attach_db(app):

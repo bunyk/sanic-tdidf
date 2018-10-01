@@ -1,7 +1,7 @@
 from sanic.views import HTTPMethodView
 from sanic.response import json
 
-from tfidf.database_setup import acquire_pool
+from .database_setup import acquire_pool
 
 class PageView(HTTPMethodView): 
     async def get(self, request, title):

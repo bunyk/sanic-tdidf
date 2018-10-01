@@ -1,8 +1,8 @@
 from sanic import Sanic
 from sanic.response import json
 
-from tfidf.database_setup import attach_db
-from tfidf.page import PageView
+from .database_setup import attach_db
+from .page import PageView
 
 
 def create_app():
@@ -21,5 +21,3 @@ def create_app():
 app = create_app()
 print("ROUTES:", app.router.routes_names)
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=app.config.PORT)
